@@ -1,0 +1,10 @@
+{
+  "name": "audioMotion ESP32 LCD",
+  "short_name": "Audio LCD",
+  "description": "16-band spectrum analyzer with ESP32 LCD display",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#111",
+  "theme_color": "#1a1a1e",
+  "icons": []
+}
