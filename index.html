@@ -33,19 +33,22 @@ input[type="file"]{display:none}
 #espStat.on{color:#00e5ff;background:#003344}
 #espStat.sending{color:#ffa726;background:#332200}
 
-.settings{border-bottom:1px solid #222;font-size:12px}
-.settings summary{padding:8px 12px;cursor:pointer;color:#00e5ff;font-weight:bold;user-select:none}
-.settings details{border-bottom:1px solid #222}
-.sg{display:flex;flex-wrap:wrap;gap:6px 12px;padding:6px 12px 10px}
-.sg label{display:flex;align-items:center;gap:4px;color:#aaa;font-size:11px}
-.sg label span.hl{color:#888;min-width:30px}
-.sg select{background:#222;color:#fff;border:1px solid #444;border-radius:4px;padding:3px 4px;font-size:11px}
-.sg input[type="range"]{width:70px}
-.sg input[type="number"]{width:50px;background:#222;color:#fff;border:1px solid #444;border-radius:3px;padding:2px 4px;font-size:11px}
-.sg .val{min-width:28px;text-align:right;color:#0f0;font-family:monospace;font-size:11px}
-.sg button.tgl{background:#333;color:#888;border:1px solid #555;border-radius:4px;padding:3px 8px;font-size:11px;cursor:pointer}
-.sg button.tgl.on{background:#0f0;color:#000;border-color:#0f0}
-.sg .hlp{color:#666;font-size:10px;margin-left:2px;text-decoration:none;cursor:help}
+fieldset{border:1px dotted #666;display:inline-block;min-height:70px;vertical-align:top}
+fieldset legend{font-size:12px}
+.box{margin-top:10px}
+.box .title{font-weight:bold;line-height:2;margin-right:1em}
+.label{color:#fff;display:inline-block;font-size:12px;margin:0 5px;vertical-align:top}
+.label select{display:block}
+fieldset .label,fieldset button{margin-left:2px;margin-right:2px}
+.analyzer-configuration{background:#fff1;border:1px solid #ccc8;margin:10px 0 20px;padding:0 5px 10px}
+.analyzer-configuration a{color:inherit;text-decoration:none}
+.analyzer-configuration a:hover{border-bottom:1px dotted currentColor}
+.center{text-align:center}
+.flex{align-items:center;display:flex;justify-content:space-between;flex-wrap:wrap}
+input[type="range"]{width:70px}
+select{background:#222;color:#fff;border:1px solid #444;border-radius:4px;padding:3px 4px;font-size:11px;margin-top:6px;padding:6px}
+button{padding:6px;vertical-align:bottom}
+button.active{background:#444;border:none;box-shadow:inset 1px 1px 0 #000;color:#0f0;padding:8px;text-shadow:2px 2px 10px #0f08,-2px -2px 10px #0f08}
 
 footer{padding:12px;text-align:center;font-size:11px;color:#555}
 </style>
@@ -84,180 +87,169 @@ footer{padding:12px;text-align:center;font-size:11px;color:#555}
   </select>
 </div>
 
-<div class="settings">
-<details>
-  <summary>⚙️ Settings</summary>
+<div class="analyzer-configuration">
+	<div class="box center">
+		<label class="label">Load a configuration preset
+			<select data-setting="preset" id="presets"></select>
+		</label>
 
-  <details>
-    <summary>Presets</summary>
-    <div class="sg">
-      <label><select id="presets" style="width:200px"></select></label>
-    </div>
-  </details>
+		<label class="label">mode
+			<select data-setting="mode">
+				<option value="0">[ 0 ] Discrete frequencies</option>
+				<option value="1">[ 1 ] 1/24th octave / 240 bands</option>
+				<option value="2">[ 2 ] 1/12th octave / 120 bands</option>
+				<option value="3">[ 3 ] 1/8th octave / 80 bands</option>
+				<option value="4">[ 4 ] 1/6th octave / 60 bands</option>
+				<option value="5">[ 5 ] 1/4th octave / 40 bands</option>
+				<option value="6" selected>[ 6 ] 1/3rd octave / 30 bands</option>
+				<option value="7">[ 7 ] Half octave / 20 bands</option>
+				<option value="8">[ 8 ] Full octave / 10 bands</option>
+				<option value="10">[10] Line / Area graph</option>
+			</select>
+		</label>
+	</div>
 
-  <details>
-    <summary>Mode</summary>
-    <div class="sg">
-      <label><span class="hl">mode</span>
-        <select id="s_mode">
-          <option value="0">[0] Discrete frequencies</option>
-          <option value="1">[1] 1/24 oct / 240 bands</option>
-          <option value="2">[2] 1/12 oct / 120 bands</option>
-          <option value="3">[3] 1/8 oct / 80 bands</option>
-          <option value="4">[4] 1/6 oct / 60 bands</option>
-          <option value="5">[5] 1/4 oct / 40 bands</option>
-          <option value="6" selected>[6] 1/3 oct / 30 bands</option>
-          <option value="7">[7] Half oct / 20 bands</option>
-          <option value="8">[8] Full oct / 10 bands</option>
-          <option value="10">[10] Line / Area graph</option>
-        </select>
-      </label>
-    </div>
-  </details>
+	<div class="box center flex">
+		<fieldset>
+			<legend>FFT</legend>
 
-  <details>
-    <summary>FFT</summary>
-    <div class="sg">
-      <label><span class="hl">fftSize</span>
-        <select id="s_fftSize">
-          <option value="1024">1024</option>
-          <option value="2048">2048</option>
-          <option value="4096">4096</option>
-          <option value="8192">8192</option>
-          <option value="16384">16384</option>
-          <option value="32768">32768</option>
-        </select>
-      </label>
-      <label><span class="hl">smoothing</span>
-        <input type="range" id="s_smoothing" min="0" max=".9" step=".1" value=".5">
-        <span class="val" id="v_smoothing">0.5</span>
-      </label>
-    </div>
-  </details>
+			<label class="label">fftSize
+				<select data-setting="fftSize">
+					<option value="1024">1024</option>
+					<option value="2048">2048</option>
+					<option value="4096">4096</option>
+					<option value="8192">8192</option>
+					<option value="16384">16384</option>
+					<option value="32768">32768</option>
+				</select>
+			</label>
+			<label class="label">smoothing
+				<input type="range" min="0" max=".9" step=".1" data-setting="smoothing">
+				<div class="value"></div>
+			</label>
+		</fieldset>
 
-  <details>
-    <summary>Frequency range &amp; scaling</summary>
-    <div class="sg">
-      <label><span class="hl">minFreq</span>
-        <select id="s_minFreq">
-          <option value="10">10</option><option value="16">16</option>
-          <option value="20" selected>20</option><option value="25">25</option>
-          <option value="30">30</option><option value="40">40</option>
-          <option value="60">60</option><option value="100">100</option>
-          <option value="500">500</option><option value="1000">1000</option>
-        </select>
-      </label>
-      <label><span class="hl">maxFreq</span>
-        <select id="s_maxFreq">
-          <option value="8000">8000</option><option value="10000">10000</option>
-          <option value="12000">12000</option><option value="16000">16000</option>
-          <option value="20000" selected>20000</option><option value="22000">22000</option>
-          <option value="24000">24000</option>
-        </select>
-      </label>
-      <label><span class="hl">scale</span>
-        <select id="s_frequencyScale">
-          <option value="bark">Bark</option>
-          <option value="linear">Linear</option>
-          <option value="log" selected>Log</option>
-          <option value="mel">Mel</option>
-        </select>
-      </label>
-    </div>
-  </details>
+		<fieldset>
+			<legend>Frequency range & scaling</legend>
 
-  <details>
-    <summary>Sensitivity</summary>
-    <div class="sg">
-      <label><span class="hl">filter</span>
-        <select id="s_weightingFilter">
-          <option value="">none</option><option value="A">A</option>
-          <option value="B">B</option><option value="C">C</option>
-          <option value="D">D</option><option value="468">468</option>
-        </select>
-      </label>
-      <label><span class="hl">min dB</span>
-        <input type="range" id="s_minDecibels" min="-120" max="-60" step="5" value="-85">
-        <span class="val" id="v_minDecibels">-85</span>
-      </label>
-      <label><span class="hl">max dB</span>
-        <input type="range" id="s_maxDecibels" min="-40" max="0" step="5" value="-25">
-        <span class="val" id="v_maxDecibels">-25</span>
-      </label>
-    </div>
-  </details>
+			<label class="label">minFreq
+				<select data-setting="minFreq">
+					<option value="10">10</option><option value="16">16</option>
+					<option value="20" selected>20</option><option value="25">25</option>
+					<option value="30">30</option><option value="40">40</option>
+					<option value="60">60</option><option value="100">100</option>
+					<option value="500">500</option><option value="1000">1000</option>
+				</select>
+			</label>
 
-  <details>
-    <summary>Linear amplitude</summary>
-    <div class="sg">
-      <label><button class="tgl" id="s_linearAmplitude">linearAmplitude</button></label>
-      <label><span class="hl">boost</span>
-        <input type="range" id="s_linearBoost" min="1" max="4" step=".2" value="1">
-        <span class="val" id="v_linearBoost">1.0</span>
-      </label>
-    </div>
-  </details>
+			<label class="label">maxFreq
+				<select data-setting="maxFreq">
+					<option value="8000">8000</option><option value="10000">10000</option>
+					<option value="12000">12000</option><option value="16000">16000</option>
+					<option value="20000" selected>20000</option><option value="22000">22000</option>
+					<option value="24000">24000</option>
+				</select>
+			</label>
 
-  <details>
-    <summary>Display</summary>
-    <div class="sg">
-      <label><span class="hl">barSpace</span>
-        <input type="range" id="s_barSpace" min="0" max="1" step=".05" value="0.1">
-        <span class="val" id="v_barSpace">0.1</span>
-      </label>
-      <label><span class="hl">channel</span>
-        <select id="s_channelLayout">
-          <option value="single">Single</option>
-          <option value="dual-vertical">Dual-V</option>
-          <option value="dual-horizontal">Dual-H</option>
-          <option value="dual-combined">Dual-C</option>
-        </select>
-      </label>
-      <label><span class="hl">color</span>
-        <select id="s_colorMode">
-          <option value="gradient">Gradient</option>
-          <option value="bar-index">Bar index</option>
-          <option value="bar-level">Bar level</option>
-        </select>
-      </label>
-      <label><span class="hl">gradient</span>
-        <select id="s_gradient">
-          <option value="classic">Classic</option>
-          <option value="prism">Prism</option>
-          <option value="rainbow">Rainbow</option>
-          <option value="orangered">OrangeRed</option>
-          <option value="steelblue">SteelBlue</option>
-        </select>
-      </label>
-      <label><span class="hl">mirror</span>
-        <select id="s_mirror">
-          <option value="0">Off</option>
-          <option value="-1">Left</option>
-          <option value="1">Right</option>
-        </select>
-      </label>
-      <label><span class="hl">reflex</span>
-        <input type="range" id="s_reflexRatio" min="0" max=".9" step=".05" value="0">
-        <span class="val" id="v_reflexRatio">0</span>
-      </label>
-    </div>
-    <div class="sg">
-      <button class="tgl" id="s_ledBars">ledBars</button>
-      <button class="tgl" id="s_lumiBars">lumiBars</button>
-      <button class="tgl" id="s_showPeaks">showPeaks</button>
-      <button class="tgl" id="s_showScaleX">showScaleX</button>
-      <button class="tgl" id="s_showBgColor">showBgColor</button>
-      <button class="tgl" id="s_radial">radial</button>
-      <button class="tgl" id="s_alphaBars">alphaBars</button>
-      <button class="tgl" id="s_outlineBars">outlineBars</button>
-      <button class="tgl" id="s_roundBars">roundBars</button>
-      <button class="tgl" id="s_ansiBands">ansiBands</button>
-      <button class="tgl" id="s_trueLeds">trueLeds</button>
-      <button class="tgl" id="s_showFPS">showFPS</button>
-    </div>
-  </details>
+			<label class="label">frequencyScale
+				<select data-setting="frequencyScale">
+					<option value="bark">Bark</option>
+					<option value="linear">Linear</option>
+					<option value="log" selected>Log</option>
+					<option value="mel">Mel</option>
+				</select>
+			</label>
+		</fieldset>
 
-</details>
+		<fieldset>
+			<legend>Sensitivity</legend>
+
+			<label class="label">weightingFilter
+				<select data-setting="weightingFilter">
+					<option value="">none</option><option value="A">A</option>
+					<option value="B">B</option><option value="C">C</option>
+					<option value="D">D</option><option value="468">468</option>
+				</select>
+			</label>
+
+			<label class="label">minDecibels
+				<input type="range" min="-120" max="-60" step="5" data-setting="minDecibels">
+				<div class="value"></div>
+			</label>
+
+			<label class="label">maxDecibels
+				<input type="range" min="-40" max="0" step="5" data-setting="maxDecibels">
+				<div class="value"></div>
+			</label>
+		</fieldset>
+
+		<fieldset>
+			<legend>Linear amplitude</legend>
+
+			<button data-prop="linearAmplitude">linearAmplitude</button>
+			<label class="label">linearBoost
+				<input type="range" min="1" max="4" step=".2" data-setting="linearBoost">
+				<div class="value"></div>
+			</label>
+		</fieldset>
+
+		<fieldset>
+			<legend>Display</legend>
+
+			<label class="label">barSpace
+				<input type="range" min="0" max="1" step=".05" data-setting="barSpace">
+				<div class="value"></div>
+			</label>
+			<label class="label">channelLayout
+				<select data-setting="channelLayout">
+					<option value="single">Single</option>
+					<option value="dual-vertical">Dual-V</option>
+					<option value="dual-horizontal">Dual-H</option>
+					<option value="dual-combined">Dual-C</option>
+				</select>
+			</label>
+			<label class="label">colorMode
+				<select data-setting="colorMode">
+					<option value="gradient">Gradient</option>
+					<option value="bar-index">Bar index</option>
+					<option value="bar-level">Bar level</option>
+				</select>
+			</label>
+			<label class="label">gradient
+				<select data-setting="gradient">
+					<option value="classic">Classic</option>
+					<option value="prism">Prism</option>
+					<option value="rainbow">Rainbow</option>
+					<option value="orangered">OrangeRed</option>
+					<option value="steelblue">SteelBlue</option>
+				</select>
+			</label>
+			<label class="label">mirror
+				<select data-setting="mirror">
+					<option value="0">Off</option>
+					<option value="-1">Left</option>
+					<option value="1">Right</option>
+				</select>
+			</label>
+			<label class="label">reflexRatio
+				<input type="range" min="0" max=".9" step=".05" data-setting="reflexRatio">
+				<div class="value"></div>
+			</label>
+
+			<button data-prop="ledBars">ledBars</button>
+			<button data-prop="lumiBars">lumiBars</button>
+			<button data-prop="showPeaks">showPeaks</button>
+			<button data-prop="showScaleX">showScaleX</button>
+			<button data-prop="showBgColor">showBgColor</button>
+			<button data-prop="radial">radial</button>
+			<button data-prop="alphaBars">alphaBars</button>
+			<button data-prop="outlineBars">outlineBars</button>
+			<button data-prop="roundBars">roundBars</button>
+			<button data-prop="ansiBands">ansiBands</button>
+			<button data-prop="trueLeds">trueLeds</button>
+			<button data-prop="showFPS">showFPS</button>
+		</fieldset>
+	</div>
 </div>
 
 <footer>audioMotion-analyzer v<span id="version"></span> &mdash; FFT runs in browser, ESP32 is dumb display</footer>
@@ -275,10 +267,7 @@ const espIP = $('espIP'), btnEsp = $('btnEsp'), espStat = $('espStat'), espFps =
 // ── Logging ──
 function status(t, c) { st.textContent = t; st.className = c || 'er'; }
 
-// Lists of settings for updateUI
-const SETTINGS_SELECT = ['mode','fftSize','minFreq','maxFreq','frequencyScale','weightingFilter','channelLayout','colorMode','gradient','mirror'];
-const SETTINGS_RANGE = ['smoothing','minDecibels','maxDecibels','barSpace','reflexRatio','linearBoost'];
-const SETTINGS_TOGGLE = ['linearAmplitude','ledBars','lumiBars','showPeaks','showScaleX','showBgColor','radial','alphaBars','outlineBars','roundBars','ansiBands','trueLeds','showFPS'];
+// ── Presets list (from fluid demo) ──
 
 // ── Presets (from fluid demo) ──
 const presets = [
@@ -296,7 +285,6 @@ const audioMotion = new AudioMotionAnalyzer(
   document.getElementById('container'),
   {
     source: au,
-    start: false,
     mode: 6,
     minFreq: 20,
     maxFreq: 20000,
@@ -336,117 +324,56 @@ const audioMotion = new AudioMotionAnalyzer(
   }
 );
 
-audioMotion.start();
 document.getElementById('version').textContent = AudioMotionAnalyzer.version;
 
-// ── Settings <-> audioMotion binding ──
-function getVal(el) {
-  if (el.type === 'range' || el.type === 'number') return +el.value;
-  if (el.tagName === 'SELECT') {
-    const v = el.value;
-    const n = +v;
-    if (!isNaN(n) && v !== '') return n;
-    return v;
-  }
-  return el.value;
+// ── Resume AudioContext on first user tap (mobile Chrome autoplay policy) ──
+function resumeAudio() {
+  if (audioMotion.audioCtx.state === 'suspended')
+    audioMotion.audioCtx.resume();
 }
 
-// Update all UI from audioMotion state
-function updateUI() {
-  // Select elements
-  SETTINGS_SELECT.forEach(p => {
-    const el = document.getElementById('s_' + p);
-    if (el) el.value = audioMotion[p];
-  });
-  // Range inputs + value displays
-  SETTINGS_RANGE.forEach(p => {
-    const el = document.getElementById('s_' + p);
-    if (el) {
-      el.value = audioMotion[p];
-      const sib = el.nextElementSibling;
-      if (sib && sib.classList.contains('val')) sib.textContent = el.value;
-    }
-  });
-  // Toggle buttons
-  SETTINGS_TOGGLE.forEach(p => {
-    const el = document.getElementById('s_' + p);
-    if (el) el.classList.toggle('on', !!audioMotion[p]);
-  });
-}
+document.addEventListener('click', resumeAudio, { once: true });
 
-// Wire select/range elements by id
-function wireById(id, prop) {
-  const el = document.getElementById(id);
-  if (!el) return;
+// ── Settings → audioMotion: data-setting binding ──
+document.querySelectorAll('[data-setting]').forEach(el => {
   el.addEventListener('change', () => {
-    audioMotion[prop] = getVal(el);
-    if (el.type === 'range') {
-      const sib = el.nextElementSibling;
-      if (sib && sib.classList.contains('val')) sib.textContent = el.value;
+    if (el.id === 'presets') {
+      const opts = presets[el.value].options;
+      if (opts) audioMotion.setOptions(opts);
+      else audioMotion.setOptions({ mode: 0, minFreq: 20, maxFreq: 20000, minDecibels: -85, maxDecibels: -25, smoothing: 0.5, barSpace: 0.1, ledBars: false, lumiBars: false, showPeaks: true, showScaleX: true, showBgColor: true, gradient: 'classic', radial: false, reflexRatio: 0, mirror: 0, frequencyScale: 'log', weightingFilter: '', linearAmplitude: false, linearBoost: 1, alphaBars: false, outlineBars: false, roundBars: false, ansiBands: false, trueLeds: false, channelLayout: 'single', colorMode: 'gradient', showFPS: false });
+      updateUI();
+      return;
     }
+    audioMotion[el.dataset.setting] = el.value;
+    updateRangeElement(el);
   });
   el.addEventListener('input', () => {
     if (el.type === 'range') {
-      audioMotion[prop] = +el.value;
-      const sib = el.nextElementSibling;
-      if (sib && sib.classList.contains('val')) sib.textContent = el.value;
+      audioMotion[el.dataset.setting] = +el.value;
+      updateRangeElement(el);
     }
   });
-}
+});
 
-// Wire toggle buttons by id
-function wireToggleById(id, prop) {
-  const el = document.getElementById(id);
-  if (!el) return;
+// ── Toggle buttons: data-prop binding ──
+document.querySelectorAll('[data-prop]').forEach(el => {
   el.addEventListener('click', () => {
-    audioMotion[prop] = !audioMotion[prop];
-    el.classList.toggle('on', !!audioMotion[prop]);
+    audioMotion[el.dataset.prop] = !audioMotion[el.dataset.prop];
+    el.classList.toggle('active', !!audioMotion[el.dataset.prop]);
   });
+});
+
+// ── Update helper ──
+function updateRangeElement(el) {
+  const s = el.nextElementSibling;
+  if (s && s.className === 'value') s.innerText = el.value;
 }
 
-// Wire all settings
-wireById('s_mode', 'mode');
-wireById('s_fftSize', 'fftSize');
-wireById('s_smoothing', 'smoothing');
-wireById('s_minFreq', 'minFreq');
-wireById('s_maxFreq', 'maxFreq');
-wireById('s_frequencyScale', 'frequencyScale');
-wireById('s_weightingFilter', 'weightingFilter');
-wireById('s_minDecibels', 'minDecibels');
-wireById('s_maxDecibels', 'maxDecibels');
-wireById('s_barSpace', 'barSpace');
-wireById('s_channelLayout', 'channelLayout');
-wireById('s_colorMode', 'colorMode');
-wireById('s_gradient', 'gradient');
-wireById('s_mirror', 'mirror');
-wireById('s_reflexRatio', 'reflexRatio');
-wireById('s_linearBoost', 'linearBoost');
-wireToggleById('s_linearAmplitude', 'linearAmplitude');
-wireToggleById('s_ledBars', 'ledBars');
-wireToggleById('s_lumiBars', 'lumiBars');
-wireToggleById('s_showPeaks', 'showPeaks');
-wireToggleById('s_showScaleX', 'showScaleX');
-wireToggleById('s_showBgColor', 'showBgColor');
-wireToggleById('s_radial', 'radial');
-wireToggleById('s_alphaBars', 'alphaBars');
-wireToggleById('s_outlineBars', 'outlineBars');
-wireToggleById('s_roundBars', 'roundBars');
-wireToggleById('s_ansiBands', 'ansiBands');
-wireToggleById('s_trueLeds', 'trueLeds');
-wireToggleById('s_showFPS', 'showFPS');
-
-// ── Presets ──
-const presetSel = document.getElementById('presets');
-presets.forEach((p, i) => {
-  const opt = new Option(p.name, i);
-  presetSel.append(opt);
-});
-presetSel.addEventListener('change', () => {
-  const opts = presets[presetSel.value].options;
-  if (opts) audioMotion.setOptions(opts);
-  else audioMotion.setOptions({ mode: 0, minFreq: 20, maxFreq: 20000, minDecibels: -85, maxDecibels: -25, smoothing: 0.5, barSpace: 0.1, ledBars: false, lumiBars: false, showPeaks: true, showScaleX: true, showBgColor: true, gradient: 'classic', radial: false, reflexRatio: 0, mirror: 0, frequencyScale: 'log', weightingFilter: '', linearAmplitude: false, linearBoost: 1, alphaBars: false, outlineBars: false, roundBars: false, ansiBands: false, trueLeds: false, channelLayout: 'single', colorMode: 'gradient', showFPS: false });
-  updateUI();
-});
+function updateUI() {
+  document.querySelectorAll('[data-setting]').forEach(el => el.value = audioMotion[el.dataset.setting]);
+  document.querySelectorAll('input[type="range"]').forEach(el => updateRangeElement(el));
+  document.querySelectorAll('button[data-prop]').forEach(el => el.classList.toggle('active', !!audioMotion[el.dataset.prop]));
+}
 
 // ── Audio Sources ──
 // File upload
@@ -454,12 +381,13 @@ $('up').addEventListener('change', e => {
   const f = e.target.files[0];
   if (!f) return;
   au.src = URL.createObjectURL(f);
-  au.play().then(() => sst.textContent = f.name).catch(() => {});
+  au.play().then(() => { sst.textContent = f.name; resumeAudio(); }).catch(() => {});
 });
 
 // Mic
 let micStream = null;
 $('btnMic').addEventListener('click', () => {
+  resumeAudio();
   if (micStream) {
     audioMotion.disconnectInput(micStream, true);
     micStream = null;
@@ -480,10 +408,11 @@ $('btnMic').addEventListener('click', () => {
 // Tab audio
 let tabStream = null;
 $('btnTab').addEventListener('click', () => {
+  resumeAudio();
   if (tabStream) {
     tabStream.getTracks().forEach(t => t.stop());
     tabStream = null;
-    $('btnTab').classList.remove('on');
+    $('btnTab').classList.remove('active');
     sst.textContent = 'No source';
     return;
   }
@@ -493,10 +422,10 @@ $('btnTab').addEventListener('click', () => {
       tabStream = stream;
       const src = audioMotion.audioCtx.createMediaStreamSource(stream);
       audioMotion.connectInput(src);
-      $('btnTab').classList.add('on');
+      $('btnTab').classList.add('active');
       sst.textContent = 'Tab audio';
       stream.getAudioTracks()[0].addEventListener('ended', () => {
-        $('btnTab').classList.remove('on');
+        $('btnTab').classList.remove('active');
         tabStream = null;
         sst.textContent = 'No source';
       });
@@ -507,11 +436,11 @@ $('btnTab').addEventListener('click', () => {
 // When audio element plays, ensure audioMotion has source connected
 au.addEventListener('play', () => {
   sst.textContent = au.src ? au.src.split('/').pop() || 'Playing' : 'Playing';
+  resumeAudio();
 });
 
 // ── ESP32 WiFi Streaming ──
 // Uses Image() instead of fetch() to bypass HTTPS→HTTP mixed content blocking.
-// Images are "optionally-blockable" content — most browsers allow them by default.
 let espTimer = null;
 let espSending = false;
 let espConnected = false;
@@ -534,7 +463,6 @@ function espSend() {
   }
   const heights = vals.map(v => Math.max(0, Math.min(16, Math.round(v * 16))));
 
-  // Image() request — works from HTTPS pages to HTTP endpoints (optionally-blockable content)
   new Image().src = `http://${espIP.value}/s?d=${heights.join(',')}`;
 
   if (!espSending) {
@@ -556,7 +484,6 @@ function espConnect() {
   espStat.textContent = 'Connected';
   status('Connected', 'ok');
 
-  // Start send loop
   const interval = Math.round(1000 / parseInt(espFps.value));
   if (espTimer) clearInterval(espTimer);
   espTimer = setInterval(espSend, interval);
